@@ -111,4 +111,34 @@ while left <= right:
 ```
 - 可以使用二分查找的理论依据，要明确”关键的三个前提“
 - 在使用二分查找实现时，关键要厘清对于target位于左边还是右边，以及判断方式
+### 思考题：使用二分查找，寻找一个半有序数组 [4, 5, 6, 7, 0, 1, 2] 中间无序的地方
+1. 如题所示，需要返回元素0的下标值
+2. 目标数组需至少有2个元素，且存在非递增的连续元素
+3. 解题的关键是在数组中找到递减的相邻两个元素，返回其中第二个元素的下标值
+4. 通过二分查找，不断将有序递增的一半减去，直至逼近到递减的两个元素
+5. 输出第二个元素下标
+```
+def search(nums: List[int]) -> int:
+    # 无元素或1个元素认为不符合要求返回-1
+    if not nums or len(nums) == 1: 
+        return -1
+    left, right = 0, len(nums) - 1
+    while left < right:
+        mid = (left + right) // 2
+        if nums[left] == nums[mid]:
+            # 达到最后两个元素
+            # 若不存在无序关系，不符合题意返回-1
+            # 返回第二个即较小的元素下标
+            return mid + 1 if nums[left] > nums[mid + 1] else -1
+        elif nums[left] < nums[mid]:
+            # 左侧正序，无序目标在右边
+            left = mid
+        else:
+            # 左侧存在无序目标
+            right = mid
+
+    return -1
+```
+
+
 
